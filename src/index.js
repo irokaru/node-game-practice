@@ -4,6 +4,8 @@ import SystemConfig from './Config/System';
 
 import GameScene from './Scenes/GameScene';
 
+// -----------------------------------------------------
+
 const config = {
   type: Phaser.AUTO,
   parent: 'game',
@@ -17,6 +19,8 @@ const config = {
     }
   },
 };
+
+// -----------------------------------------------------
 
 const game = new Phaser.Game(config);
 window.game = game;
