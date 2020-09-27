@@ -71,6 +71,14 @@ export default class GameScene extends Phaser.Scene {
       bar.moveRelative(3, 0, true);
     }
 
+    // bound ball
+    if (ball.collisionWallX()) {
+      ball.setVector(ball.vector.x * -1, ball.vector.y);
+    }
+    if (ball.collisionWallY()) {
+      ball.setVector(ball.vector.x, ball.vector.y * -1);
+    }
+
     ball.moveByVector();
   }
 };

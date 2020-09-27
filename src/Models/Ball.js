@@ -58,6 +58,32 @@ export default class Ball extends Phaser.GameObjects.Arc {
   }
 
   /**
+   * 上限値、下限値に基づいて次回移動時に壁にぶつかるかどうかを検証する
+   * @returns {boolean}
+   */
+  collisionWallX() {
+    const x = this.x + this.vector.x;
+
+    if (x < this.xMin || this.xMax < x) {
+      return true
+    }
+    return false;
+  }
+
+  /**
+   * 上限値、下限値に基づいて次回移動時に壁にぶつかるかどうかを検証する
+   * @returns {boolean}
+   */
+  collisionWallY() {
+    const y = this.y + this.vector.y;
+
+    if (y < this.yMin || this.yMax < y) {
+      return true
+    }
+    return false;
+  }
+
+  /**
    * 上限値、下限値に基づいて座標を画面内に収める
    * @returns {Bar}
    */
