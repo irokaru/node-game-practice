@@ -2,6 +2,7 @@ import Bar   from '../Models/Bar';
 import Block from '../Models/Block';
 
 import ControllableObject from '../Repositories/ControllableObject';
+import KeyController      from '../Repositories/KeyController';
 
 import BlockSettings  from '../Settings/BlockSettings';
 import BarSettings    from '../Settings/BarSettings';
@@ -9,9 +10,11 @@ import SystemSettings from '../Settings/SystemSettings';
 
 // -----------------------------------------------------
 
+const keyInput = new KeyController();
+
 export default class GameScene extends Phaser.Scene {
   constructor () {
-    super({ key: 'Game', active: false })
+    super({ key: 'Game', active: false });
   }
 
   preload() {
@@ -45,21 +48,17 @@ export default class GameScene extends Phaser.Scene {
 
     ControllableObject.add('bar', bar);
 
-    // keyboard controller settings
-    this.keys = this.input.keyboard.addKeys({
-      left: 'left',
-      right: 'right'
-    });
+    keyInput.setup(this);
   }
 
   update() {
     // controll bar
     const bar = ControllableObject.get('bar');
 
-    if (this.keys.left.isDown) {
+    if (keyInput.isDown('left')) {
       bar.moveRelative(-3, 0, true);
     }
-    if (this.keys.right.isDown) {
+    if (keyInput.isDown('right')) {
       bar.moveRelative(3, 0, true);
     }
   }
