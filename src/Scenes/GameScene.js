@@ -3,9 +3,9 @@ import Block from '../Models/Block';
 
 import ControllableObject from '../Repositories/ControllableObject';
 
-import BlockSettings from '../Settings/BlockSettings';
-import BarSettings   from '../Settings/BarSettings';
-import SystemConfig  from '../Config/System';
+import BlockSettings  from '../Settings/BlockSettings';
+import BarSettings    from '../Settings/BarSettings';
+import SystemSettings from '../Settings/SystemSettings';
 
 // -----------------------------------------------------
 
@@ -23,8 +23,8 @@ export default class GameScene extends Phaser.Scene {
     console.log('create phase...');
 
     // draw blocks
-    const blockRefX = BlockSettings.getReferenceXPos(SystemConfig.WIDTH);
-    const blockRefY = BlockSettings.getReferenceYPos(SystemConfig.HEIGHT);
+    const blockRefX = BlockSettings.getReferenceXPos(SystemSettings.WIDTH);
+    const blockRefY = BlockSettings.getReferenceYPos(SystemSettings.HEIGHT);
 
     for (let y = 0; y < BlockSettings.Y_NUM; y++) {
       for (let x = 0; x < BlockSettings.X_NUM; x++) {
@@ -39,8 +39,8 @@ export default class GameScene extends Phaser.Scene {
     }
 
     // draw bar
-    const barXpos = BarSettings.getReferenceXPos(SystemConfig.WIDTH);
-    const barYpos = BarSettings.getReferenceYPos(SystemConfig.HEIGHT);
+    const barXpos = BarSettings.getReferenceXPos(SystemSettings.WIDTH);
+    const barYpos = BarSettings.getReferenceYPos(SystemSettings.HEIGHT);
     const bar     = new Bar(this, barXpos, barYpos, BarSettings.X_SIZE, BarSettings.Y_SIZE, BarSettings.COLOR);
 
     ControllableObject.add('bar', bar);

@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import SystemConfig from './Config/System';
+import SystemSettings from './Settings/SystemSettings';
 
 import GameScene from './Scenes/GameScene';
 
@@ -9,8 +9,8 @@ import GameScene from './Scenes/GameScene';
 const config = {
   type: Phaser.AUTO,
   parent: 'game',
-  width: SystemConfig.WIDTH,
-  height: SystemConfig.HEIGHT,
+  width: SystemSettings.WIDTH,
+  height: SystemSettings.HEIGHT,
   scene: [GameScene],
   physics: {
     default: 'arcade',
