@@ -1,6 +1,6 @@
-import Block     from '../Models/Block';
-import BlockList from '../Repositories/BlockList';
+import Block from '../Models/Block';
 
+import BS           from '../Settings/BlockSettings';
 import SystemConfig from '../Config/System';
 
 // -----------------------------------------------------
@@ -18,19 +18,19 @@ export default class GameScene extends Phaser.Scene {
   create() {
     console.log('create phase...');
 
-    const initialXpos = Block.getInitialXPos(SystemConfig.WIDTH);
-    const initialYpos = Block.getInitialYPos(SystemConfig.HEIGHT);
-    const blockColor  = 0xCCCCCC;
+    // draw blocks
+    const blockRefX = BS.getReferenceXPos(SystemConfig.WIDTH);
+    const blockRefY = BS.getReferenceYPos(SystemConfig.HEIGHT);
 
-    for (let x = 0; x < Block.X_NUM; x++) {
-      for (let y = 0; y < Block.Y_NUM; y++) {
-        const xPos = x * (Block.X_SIZE + 1) + initialXpos;
-        const yPos = y * (Block.Y_SIZE + 1) + initialYpos;
+    for (let x = 0; x < BS.X_NUM; x++) {
+      for (let y = 0; y < BS.Y_NUM; y++) {
+        const xPos = x * (BS.X_SIZE + 1) + BS.X_SIZE / 2 + blockRefX;
+        const yPos = y * (BS.Y_SIZE + 1) + BS.Y_SIZE / 2 + blockRefY;
 
-        const block = this.add.graphics().fillStyle(blockColor, 1).fillRect(xPos, yPos, Block.X_SIZE, Block.Y_SIZE);
-
-        BlockList.add(block);
+        new Block(this, xPos, yPos, BS.X_SIZE, BS.Y_SIZE, BS.COLOR);
       }
     }
+
+    console.log(this.children.getAll());
   }
 };
