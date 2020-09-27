@@ -40,10 +40,16 @@ class ControllableObject {
     return this._hasKeyInList(key);
   }
 
+  /**
+   * リスト内のオブジェクトを削除する
+   * @param {string} key
+   */
   remove(key) {
     if (!this._hasKeyInList(key)) {
       throw new Error('key is not exists');
     }
+
+    delete this.list[key];
 
     return this;
   }
