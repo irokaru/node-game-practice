@@ -85,8 +85,28 @@ export default class GameScene extends Phaser.Scene {
     if (collision === 'top') {
       ball.y = bar.y - (bar.height / 2 + ball.radius);
       ball.setVector(ball.vector.x, -ball.vector.y);
+    } else {
+      ball.moveByVector();
     }
 
-    ball.moveByVector();
+    for (let i = 0; i < BlockSettings.X_NUM * BlockSettings.Y_NUM; i++) {
+      const key = `block${i}`;
+      if (!ControllableObject.has(key)) {
+        continue;
+      }
+
+      const block          = ControllableObject.get(key);
+      const breakCollision = Collision.rect2circle(block, ball);
+
+      if (breakCollision !== '') {
+        block.destroy();
+        ControllableObject.remove(key);
+      }
+      if (breakCollision === 'top' || breakCollision === 'bottom') {
+        ball.setVector(ball.vector.x, -ball.vector.y);
+      } else if (breakCollision === 'left' || breakCollision === 'right') {
+        ball.setVector(-ball.vector.x, ball.vector.y);
+      }
+    }
   }
 };
