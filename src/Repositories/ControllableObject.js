@@ -53,7 +53,7 @@ class ControllableObject {
    * @param {string} key
    */
   _hasKeyInList(key) {
-    return Validator.hasKeyInObject(key, this.list);
+    return Validator.hasKeyInObject(this.list, key);
   }
 };
 
