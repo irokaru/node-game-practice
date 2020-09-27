@@ -10,6 +10,8 @@ import BlockSettings  from '../Settings/BlockSettings';
 import BarSettings    from '../Settings/BarSettings';
 import SystemSettings from '../Settings/SystemSettings';
 
+import Collision from '../Util/Collision';
+
 // -----------------------------------------------------
 
 const keyInput = new KeyController();
@@ -52,7 +54,7 @@ export default class GameScene extends Phaser.Scene {
     // create ball
     const ballXpos = BarSettings.getReferenceXPos(SystemSettings.WIDTH);
     const ballYpos = BarSettings.getReferenceYPos(SystemSettings.HEIGHT) - 150;
-    const ball     = new Ball(this, ballXpos, ballYpos, BallSettings.RADIUS, BallSettings.COLOR).setVector(1, 1);
+    const ball     = new Ball(this, ballXpos, ballYpos, BallSettings.RADIUS, BallSettings.COLOR).setVector(3, 3);
     ControllableObject.add('ball', ball);
 
     // key setup
@@ -73,10 +75,16 @@ export default class GameScene extends Phaser.Scene {
 
     // bound ball
     if (ball.collisionWallX()) {
-      ball.setVector(ball.vector.x * -1, ball.vector.y);
+      ball.setVector(-ball.vector.x, ball.vector.y);
     }
     if (ball.collisionWallY()) {
-      ball.setVector(ball.vector.x, ball.vector.y * -1);
+      ball.setVector(ball.vector.x, -ball.vector.y);
+    }
+
+    const collision = Collision.rect2circle(bar, ball);
+    if (collision === 'top') {
+      ball.y = bar.y - (bar.height / 2 + ball.radius);
+      ball.setVector(ball.vector.x, -ball.vector.y);
     }
 
     ball.moveByVector();

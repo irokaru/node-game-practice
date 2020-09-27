@@ -13,10 +13,10 @@ export default class Ball extends Phaser.GameObjects.Arc {
 
     this.setVector(0, 0);
 
-    this.xMin = this.radius / 2;
-    this.xMax = scene.game.canvas.width - this.radius / 2;
-    this.yMin = this.radius / 2;
-    this.yMax = scene.game.canvas.height - this.radius / 2;
+    this.xMin = this.radius;
+    this.xMax = scene.game.canvas.width - this.radius;
+    this.yMin = this.radius;
+    this.yMax = scene.game.canvas.height - this.radius;
 
     return this;
   }
