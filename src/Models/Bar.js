@@ -1,4 +1,15 @@
 export default class Bar extends Phaser.GameObjects.Rectangle {
+  /**
+   * バーを生成する
+   * @param {Phaser.Scene} scene
+   * @param {number} x
+   * @param {number} y
+   * @param {number} width
+   * @param {number} height
+   * @param {number} fillColor
+   * @param {number} fillAlpha
+   * @returns {Bar}
+   */
   constructor(scene, x, y, width, height, fillColor, fillAlpha) {
     super(scene, x, y, width, height, fillColor, fillAlpha);
     scene.add.existing(this);
