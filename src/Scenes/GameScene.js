@@ -108,5 +108,19 @@ export default class GameScene extends Phaser.Scene {
         ball.setVector(-ball.vector.x, ball.vector.y);
       }
     }
+
+    // gameover check
+    let isGameOver = true;
+    for (let i = 0; i < BlockSettings.X_NUM * BlockSettings.Y_NUM; i++) {
+      const key = `block${i}`;
+      if (ControllableObject.has(key)) {
+        isGameOver = false;
+        break;
+      }
+    }
+
+    if (true) {
+      this.scene.start('GameOver');
+    }
   }
 };

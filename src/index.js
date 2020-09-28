@@ -2,7 +2,8 @@ import Phaser from 'phaser';
 
 import SystemSettings from './Settings/SystemSettings';
 
-import GameScene from './Scenes/GameScene';
+import GameScene     from './Scenes/GameScene';
+import GameOverScene from './Scenes/GameOverScene';
 
 // -----------------------------------------------------
 
@@ -11,7 +12,7 @@ const config = {
   parent: 'game',
   width: SystemSettings.WIDTH,
   height: SystemSettings.HEIGHT,
-  scene: [GameScene],
+  scene: [GameScene, GameOverScene],
   physics: {
     default: 'arcade',
     arcade: {
