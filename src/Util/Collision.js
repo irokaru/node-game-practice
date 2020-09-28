@@ -25,19 +25,19 @@ export default class Collision {
     let y = circle.y;
     let edge = '';
 
-    if (circle.x < rect.x) {
-      x = rect.x;
+    if (circle.x < rect.x - rect.width / 2) {
+      x = rect.x - rect.width / 2;
       edge = 'left';
-    } else if (circle.x > rect.x + rect.width) {
-      x = rect.x + rect.width;
+    } else if (circle.x > rect.x + rect.width / 2) {
+      x = rect.x + rect.width / 2;
       edge = 'right';
     }
 
-    if (circle.y < rect.y) {
-      y = rect.y;
+    if (circle.y < rect.y - rect.height / 2) {
+      y = rect.y - rect.height / 2;
       edge = 'top';
-    } else if (circle.y > rect.y + rect.height) {
-      y = rect.y + rect.height;
+    } else if (circle.y > rect.y + rect.height / 2) {
+      y = rect.y + rect.height / 2;
       edge ='bottom';
     }
 
@@ -45,7 +45,7 @@ export default class Collision {
     const dy = circle.y - y;
     const dist = Math.sqrt((dx*dx) + (dy*dy));
 
-    if (dist <= circle.radius) {
+    if (dist < circle.radius) {
       return edge;
     }
 
