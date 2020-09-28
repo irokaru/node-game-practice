@@ -22,6 +22,12 @@ yarn
 yarn dev
 ```
 
+## Githubにデプロイする
+
+```
+yarn deploy
+```
+
 ## 問題点
 
 - たまに当たり判定がすり抜ける
