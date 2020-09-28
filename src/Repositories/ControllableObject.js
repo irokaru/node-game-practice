@@ -1,6 +1,6 @@
 import Validator from '../Util/Validator';
 
-class ControllableObject {
+export default class ControllableObject {
  constructor() {
     this.list = {};
   }
@@ -62,5 +62,3 @@ class ControllableObject {
     return Validator.hasKeyInObject(this.list, key);
   }
 };
-
-export default new ControllableObject();

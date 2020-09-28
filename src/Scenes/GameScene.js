@@ -15,6 +15,8 @@ import Collision from '../Util/Collision';
 // -----------------------------------------------------
 
 const keyInput = new KeyController();
+const objects  = new ControllableObject();
+const blocks   = new ControllableObject();
 
 export default class GameScene extends Phaser.Scene {
   constructor () {
@@ -41,7 +43,7 @@ export default class GameScene extends Phaser.Scene {
         const block = new Block(this, xPos, yPos, BlockSettings.X_SIZE, BlockSettings.Y_SIZE, BlockSettings.COLOR);
         const blockNumber = x + y * BlockSettings.X_NUM;
 
-        ControllableObject.add(`block${blockNumber}`, block);
+        blocks.add(`block${blockNumber}`, block);
       }
     }
 
@@ -49,21 +51,21 @@ export default class GameScene extends Phaser.Scene {
     const barXpos = BarSettings.getReferenceXPos(SystemSettings.WIDTH);
     const barYpos = BarSettings.getReferenceYPos(SystemSettings.HEIGHT);
     const bar     = new Bar(this, barXpos, barYpos, BarSettings.X_SIZE, BarSettings.Y_SIZE, BarSettings.COLOR);
-    ControllableObject.add('bar', bar);
+    objects.add('bar', bar);
 
     // create ball
     const ballXpos = BarSettings.getReferenceXPos(SystemSettings.WIDTH);
     const ballYpos = BarSettings.getReferenceYPos(SystemSettings.HEIGHT) - 150;
     const ball     = new Ball(this, ballXpos, ballYpos, BallSettings.RADIUS, BallSettings.COLOR).setVector(3, 3);
-    ControllableObject.add('ball', ball);
+    objects.add('ball', ball);
 
     // key setup
     keyInput.setup(this);
   }
 
   update() {
-    const bar  = ControllableObject.get('bar');
-    const ball = ControllableObject.get('ball');
+    const bar  = objects.get('bar');
+    const ball = objects.get('ball');
 
     // controll bar
     if (keyInput.isDown('left')) {
@@ -89,19 +91,14 @@ export default class GameScene extends Phaser.Scene {
       ball.moveByVector();
     }
 
-    for (let i = 0; i < BlockSettings.X_NUM * BlockSettings.Y_NUM; i++) {
-      const key = `block${i}`;
-      if (!ControllableObject.has(key)) {
-        continue;
-      }
-
-      const block          = ControllableObject.get(key);
+    for (const [key, block] of Object.entries(blocks.list)) {
       const breakCollision = Collision.rect2circle(block, ball);
 
       if (breakCollision !== '') {
         block.destroy();
-        ControllableObject.remove(key);
+        blocks.remove(key);
       }
+
       if (breakCollision === 'top' || breakCollision === 'bottom') {
         ball.setVector(ball.vector.x, -ball.vector.y);
       } else if (breakCollision === 'left' || breakCollision === 'right') {
@@ -110,16 +107,7 @@ export default class GameScene extends Phaser.Scene {
     }
 
     // gameover check
-    let isGameOver = true;
-    for (let i = 0; i < BlockSettings.X_NUM * BlockSettings.Y_NUM; i++) {
-      const key = `block${i}`;
-      if (ControllableObject.has(key)) {
-        isGameOver = false;
-        break;
-      }
-    }
-
-    if (true) {
+    if (Object.keys(blocks.list).length === 0) {
       this.scene.start('GameOver');
     }
   }
