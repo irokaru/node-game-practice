@@ -2,6 +2,8 @@
 
 Phaserでお試しで作ったブロック崩し
 
+https://irokaru.github.io/node-game-practice/
+
 ## 環境
 
 - node 14.12.0
