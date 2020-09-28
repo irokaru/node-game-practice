@@ -69,10 +69,10 @@ export default class GameScene extends Phaser.Scene {
 
     // controll bar
     if (keyInput.isDown('left')) {
-      bar.moveRelative(-3, 0, true);
+      bar.moveRelative(-BarSettings.X_SPEED, 0, true);
     }
     if (keyInput.isDown('right')) {
-      bar.moveRelative(3, 0, true);
+      bar.moveRelative(BarSettings.X_SPEED, 0, true);
     }
 
     // bound ball
