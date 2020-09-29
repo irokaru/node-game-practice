@@ -52,4 +52,22 @@ export default class Collision {
 
     return '';
   }
+
+  /**
+   * 水平方向にぶつかったかどうかを返す
+   * @param {string} collisionResult
+   * @returns {boolean}
+   */
+  static isHorizon(collisionResult) {
+    return collisionResult === 'right' || collisionResult === 'left';
+  }
+
+  /**
+   * 垂直方向にぶつかったかどうかを返す
+   * @param {string} collisionResult
+   * @returns {boolean}
+   */
+  static isVertical(collisionResult) {
+    return collisionResult === 'top' || collisionResult === 'bottom';
+  }
 }

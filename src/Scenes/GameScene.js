@@ -78,11 +78,11 @@ export default class GameScene extends Phaser.Scene {
       ball.setVector(ball.vector.x, -ball.vector.y);
     }
 
-    const collision = Collision.rect2circle(bar, ball);
-    if (collision === 'top' || collision === 'bottom') {
+    const barCollision = Collision.rect2circle(bar, ball);
+    if (Collision.isVertical(barCollision)) {
       ball.y = adjustBallPos[collision](bar);
       ball.setVector(ball.vector.x, -ball.vector.y);
-    } else if (collision === 'left' || collision === 'right') {
+    } else if (Collision.isHorizon(barCollision)) {
       ball.x = adjustBallPos[collision](bar);
       ball.setVector(-ball.vector.x, ball.vector.y);
     } else {
@@ -90,17 +90,17 @@ export default class GameScene extends Phaser.Scene {
     }
 
     for (const block of this.$.blocks.getChildren()) {
-      const breakCollision = Collision.rect2circle(block, ball);
+      const blockCollision = Collision.rect2circle(block, ball);
 
-      if (breakCollision === 'top' || breakCollision === 'bottom') {
-        ball.y = adjustBallPos[breakCollision](block);
+      if (Collision.isVertical(blockCollision)) {
+        ball.y = adjustBallPos[blockCollision](block);
         ball.setVector(ball.vector.x, -ball.vector.y);
-      } else if (breakCollision === 'left' || breakCollision === 'right') {
-        ball.x = adjustBallPos[breakCollision](block);
+      } else if (Collision.isHorizon(blockCollision)) {
+        ball.x = adjustBallPos[blockCollision](block);
         ball.setVector(-ball.vector.x, ball.vector.y);
       }
 
-      if (breakCollision !== '') {
+      if (blockCollision !== '') {
         block.destroy();
         break;
       }
