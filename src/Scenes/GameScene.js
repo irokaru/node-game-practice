@@ -85,8 +85,16 @@ export default class GameScene extends Phaser.Scene {
 
     const collision = Collision.rect2circle(bar, ball);
     if (collision === 'top') {
-      ball.y = bar.y - (bar.height / 2 + ball.radius);
+      ball.y = bar.y - (bar.height / 2 + ball.radius) - 1;
       ball.setVector(ball.vector.x, -ball.vector.y);
+    } else if (collision === 'left' || collision === 'right') {
+      if (collision === 'left') {
+        ball.x = bar.getLeftCenter().x - ball.radius - 1;
+      } else if (collision === 'right') {
+        ball.x = bar.getRightCenter().x + ball.radius + 1;
+      }
+
+      ball.setVector(-ball.vector.x, ball.vector.y);
     } else {
       ball.moveByVector();
     }
@@ -94,15 +102,26 @@ export default class GameScene extends Phaser.Scene {
     for (const [key, block] of Object.entries(blocks.list)) {
       const breakCollision = Collision.rect2circle(block, ball);
 
+      if (breakCollision === 'top' || breakCollision === 'bottom') {
+        if (breakCollision === 'top') {
+          ball.y = block.getTopCenter().y - ball.radius - 1;
+        } else if (breakCollision === 'bottom') {
+          ball.y = block.getBottomCenter().y + ball.radius + 1;
+        }
+        ball.setVector(ball.vector.x, -ball.vector.y);
+      } else if (breakCollision === 'left' || breakCollision === 'right') {
+        if (collision === 'left') {
+          ball.x = block.getLeftCenter().x - ball.radius - 1;
+        } else if (collision === 'right') {
+          ball.x = block.getRightCenter().x + ball.radius + 1;
+        }
+        ball.setVector(-ball.vector.x, ball.vector.y);
+      }
+
       if (breakCollision !== '') {
         block.destroy();
         blocks.remove(key);
-      }
-
-      if (breakCollision === 'top' || breakCollision === 'bottom') {
-        ball.setVector(ball.vector.x, -ball.vector.y);
-      } else if (breakCollision === 'left' || breakCollision === 'right') {
-        ball.setVector(-ball.vector.x, ball.vector.y);
+        break;
       }
     }
 

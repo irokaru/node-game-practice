@@ -16,6 +16,7 @@ export default class Collision {
 
   /**
    * 矩形と円の当たり判定
+   * 円が矩形のどの位置と当たったかを返す
    * @param {Phaser.GameObjects.Rectangle} rect
    * @param {Phaser.GameObjects.Arc} circle
    * @returns {string}
@@ -25,19 +26,19 @@ export default class Collision {
     let y = circle.y;
     let edge = '';
 
-    if (circle.x < rect.x - rect.width / 2) {
-      x = rect.x - rect.width / 2;
+    if (circle.x < rect.getLeftCenter().x) {
+      x = rect.getLeftCenter().x;
       edge = 'left';
-    } else if (circle.x > rect.x + rect.width / 2) {
-      x = rect.x + rect.width / 2;
+    } else if (circle.x > rect.getRightCenter().x) {
+      x = rect.getRightCenter().x;
       edge = 'right';
     }
 
-    if (circle.y < rect.y - rect.height / 2) {
-      y = rect.y - rect.height / 2;
+    if (circle.y < rect.getTopCenter().y) {
+      y = rect.getTopCenter().y;
       edge = 'top';
-    } else if (circle.y > rect.y + rect.height / 2) {
-      y = rect.y + rect.height / 2;
+    } else if (circle.y > rect.getBottomCenter().y) {
+      y = rect.getBottomCenter().y;
       edge ='bottom';
     }
 
