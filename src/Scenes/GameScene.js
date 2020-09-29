@@ -2,7 +2,6 @@ import Ball from '../Models/Ball';
 import Bar   from '../Models/Bar';
 import Block from '../Models/Block';
 
-import ControllableObject from '../Repositories/ControllableObject';
 import KeyController      from '../Repositories/KeyController';
 
 import BallSettings   from '../Settings/BallSettings';
@@ -15,23 +14,16 @@ import Collision from '../Util/Collision';
 // -----------------------------------------------------
 
 const keyInput = new KeyController();
-const objects  = new ControllableObject();
-const blocks   = new ControllableObject();
 
 export default class GameScene extends Phaser.Scene {
   constructor () {
     super({ key: 'Game', active: false });
-  }
-
-  preload() {
-    // not load image in this project
-    console.log('preload phase...');
+    this.$ = {};
   }
 
   create() {
-    console.log('create phase...');
-
     // create blocks
+    this.$.blocks   = this.add.group();
     const blockRefX = BlockSettings.getReferenceXPos(SystemSettings.WIDTH);
     const blockRefY = BlockSettings.getReferenceYPos(SystemSettings.HEIGHT);
 
@@ -41,31 +33,34 @@ export default class GameScene extends Phaser.Scene {
         const yPos = y * (BlockSettings.Y_SIZE + 1) + BlockSettings.Y_SIZE / 2 + blockRefY;
 
         const block = new Block(this, xPos, yPos, BlockSettings.X_SIZE, BlockSettings.Y_SIZE, BlockSettings.COLOR);
-        const blockNumber = x + y * BlockSettings.X_NUM;
-
-        blocks.add(`block${blockNumber}`, block);
+        this.$.blocks.add(block);
       }
     }
 
     // create bar
     const barXpos = BarSettings.getReferenceXPos(SystemSettings.WIDTH);
     const barYpos = BarSettings.getReferenceYPos(SystemSettings.HEIGHT);
-    const bar     = new Bar(this, barXpos, barYpos, BarSettings.X_SIZE, BarSettings.Y_SIZE, BarSettings.COLOR);
-    objects.add('bar', bar);
+    this.$.bar    = new Bar(this, barXpos, barYpos, BarSettings.X_SIZE, BarSettings.Y_SIZE, BarSettings.COLOR);
 
     // create ball
     const ballXpos = BarSettings.getReferenceXPos(SystemSettings.WIDTH);
     const ballYpos = BarSettings.getReferenceYPos(SystemSettings.HEIGHT) - 150;
-    const ball     = new Ball(this, ballXpos, ballYpos, BallSettings.RADIUS, BallSettings.COLOR).setVector(3, 3);
-    objects.add('ball', ball);
+    this.$.ball    = new Ball(this, ballXpos, ballYpos, BallSettings.RADIUS, BallSettings.COLOR).setVector(3, 3);
 
     // key setup
     keyInput.setup(this);
   }
 
   update() {
-    const bar  = objects.get('bar');
-    const ball = objects.get('ball');
+    const bar  = this.$.bar;
+    const ball = this.$.ball;
+
+    const adjustBallPos = {
+      top   : (blockObj) => blockObj.getTopCenter().y    - ball.radius - 1,
+      bottom: (blockObj) => blockObj.getBottomCenter().y + ball.radius + 1,
+      left  : (blockObj) => blockObj.getLeftCenter().x   - ball.radius - 1,
+      right : (blockObj) => blockObj.getRightCenter().x  + ball.radius + 1,
+    };
 
     // controll bar
     if (keyInput.isDown('left')) {
@@ -84,49 +79,35 @@ export default class GameScene extends Phaser.Scene {
     }
 
     const collision = Collision.rect2circle(bar, ball);
-    if (collision === 'top') {
-      ball.y = bar.y - (bar.height / 2 + ball.radius) - 1;
+    if (collision === 'top' || collision === 'bottom') {
+      ball.y = adjustBallPos[collision](bar);
       ball.setVector(ball.vector.x, -ball.vector.y);
     } else if (collision === 'left' || collision === 'right') {
-      if (collision === 'left') {
-        ball.x = bar.getLeftCenter().x - ball.radius - 1;
-      } else if (collision === 'right') {
-        ball.x = bar.getRightCenter().x + ball.radius + 1;
-      }
-
+      ball.x = adjustBallPos[collision](bar);
       ball.setVector(-ball.vector.x, ball.vector.y);
     } else {
       ball.moveByVector();
     }
 
-    for (const [key, block] of Object.entries(blocks.list)) {
+    for (const block of this.$.blocks.getChildren()) {
       const breakCollision = Collision.rect2circle(block, ball);
 
       if (breakCollision === 'top' || breakCollision === 'bottom') {
-        if (breakCollision === 'top') {
-          ball.y = block.getTopCenter().y - ball.radius - 1;
-        } else if (breakCollision === 'bottom') {
-          ball.y = block.getBottomCenter().y + ball.radius + 1;
-        }
+        ball.y = adjustBallPos[breakCollision](block);
         ball.setVector(ball.vector.x, -ball.vector.y);
       } else if (breakCollision === 'left' || breakCollision === 'right') {
-        if (collision === 'left') {
-          ball.x = block.getLeftCenter().x - ball.radius - 1;
-        } else if (collision === 'right') {
-          ball.x = block.getRightCenter().x + ball.radius + 1;
-        }
+        ball.x = adjustBallPos[breakCollision](block);
         ball.setVector(-ball.vector.x, ball.vector.y);
       }
 
       if (breakCollision !== '') {
         block.destroy();
-        blocks.remove(key);
         break;
       }
     }
 
     // gameover check
-    if (Object.keys(blocks.list).length === 0) {
+    if (this.$.blocks.getChildren().length === 0) {
       this.scene.start('GameOver');
     }
   }
