@@ -80,10 +80,10 @@ export default class GameScene extends Phaser.Scene {
 
     const barCollision = Collision.rect2circle(bar, ball);
     if (Collision.isVertical(barCollision)) {
-      ball.y = adjustBallPos[collision](bar);
+      ball.y = adjustBallPos[barCollision](bar);
       ball.setVector(ball.vector.x, -ball.vector.y);
     } else if (Collision.isHorizon(barCollision)) {
-      ball.x = adjustBallPos[collision](bar);
+      ball.x = adjustBallPos[barCollision](bar);
       ball.setVector(-ball.vector.x, ball.vector.y);
     } else {
       ball.moveByVector();
