@@ -15,22 +15,31 @@ https://irokaru.github.io/node-game-practice/
 とりあえずパッケージインストール
 
 ```bash
+# node でやる場合
 yarn
+
+# docker-compose でやる場合
+docker-compose build
 ```
 
 ## 開発を始める
 
-```
+```bash
+# node でやる場合
 yarn dev
+
+# docker-compose でやる場合
+docker-compose up -d
 ```
 
 ## Githubにデプロイする
 
-```
+```bash
+# node でやる場合
+yarn deploy
+
+# docker-compose でやる場合
+docker-compose exec app bash
+cd app
 yarn deploy
 ```
-
-## 問題点
-
-- Phaserの強みを生かした書き方ではない
-  - 学んでリファクタしてを繰り返すスタンス
