@@ -65,7 +65,7 @@ export default class Ball extends Phaser.GameObjects.Arc {
     const x = this.x + this.vector.x;
 
     if (x < this.xMin || this.xMax < x) {
-      return true
+      return true;
     }
     return false;
   }
@@ -78,7 +78,7 @@ export default class Ball extends Phaser.GameObjects.Arc {
     const y = this.y + this.vector.y;
 
     if (y < this.yMin || this.yMax < y) {
-      return true
+      return true;
     }
     return false;
   }

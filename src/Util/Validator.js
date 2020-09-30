@@ -31,8 +31,8 @@ export default class Validator {
       string:    (val, limit, gt=true) => Validator.minLength(val, limit, gt),
       numstring: (val, limit, gt=true) => Validator.minLength(val, limit, gt),
       intstring: (val, limit, gt=true) => Validator.minLength(val, limit, gt),
-      bool:      (val, limit, gt=true) => false,
-      boolean:   (val, limit, gt=true) => false,
+      bool:      ()                    => false,
+      boolean:   ()                    => false,
       array:     (val, limit, gt=true) => Validator.minArrayLength(val, limit, gt),
       object:    (val, limit, gt=true) => Validator.minObjectLength(val, limit, gt),
     };
@@ -44,8 +44,8 @@ export default class Validator {
       string:    (val, limit, lt=true) => Validator.maxLength(val, limit, lt),
       numstring: (val, limit, lt=true) => Validator.maxLength(val, limit, lt),
       intstring: (val, limit, lt=true) => Validator.maxLength(val, limit, lt),
-      bool:      (val, limit, lt=true) => false,
-      boolean:   (val, limit, lt=true) => false,
+      bool:      ()                    => false,
+      boolean:   ()                    => false,
       array:     (val, limit, lt=true) => Validator.maxArrayLength(val, limit, lt),
       object:    (val, limit, lt=true) => Validator.maxObjectLength(val, limit, lt),
     };
@@ -67,7 +67,7 @@ export default class Validator {
     }
 
     // check type
-    for (const [key, value] of Object.entries(rules)) {
+    for (const value of Object.values(rules)) {
       if (!Validator.inArray(value.type, Object.keys(this.$._validateType))) {
         return null;
       }
@@ -410,7 +410,7 @@ export default class Validator {
    */
   static inArray(value, array, fromIndex=false) {
     if (!Validator.isArray(array) || !Validator.isBoolean(fromIndex)) {
-      return false
+      return false;
     }
     const ret = [].indexOf.call(array, value);
     return fromIndex ? ret : (ret !== -1);
@@ -437,7 +437,7 @@ export default class Validator {
     if (!Validator.isObject(obj) || !Validator.isString(key)) {
       return false;
     }
-    return obj.hasOwnProperty(key);
+    return Object.prototype.hasOwnProperty.call(obj, key);
   }
 
     /**

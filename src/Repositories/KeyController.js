@@ -20,4 +20,4 @@ export default class KeyController {
   isDown(keyName) {
     return this.keys[keyName].isDown;
   }
-};
+}

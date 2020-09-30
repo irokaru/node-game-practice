@@ -111,4 +111,4 @@ export default class GameScene extends Phaser.Scene {
       this.scene.start('GameOver');
     }
   }
-};
+}
